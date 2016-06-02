@@ -32,7 +32,6 @@ class Oystercard
     deduct(MINIMUM_FARE)
     @journeys.last.set_exit(station_name,station)
     @journeys.last
-    
   end
 
   def in_journey?
