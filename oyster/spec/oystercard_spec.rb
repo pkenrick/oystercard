@@ -122,13 +122,13 @@ describe Oystercard do
 
   end
 
-  describe "upon initialization" do
+  # describe "upon initialization" do
 
-    it "creates a new instance of JourneyLog" do
-      expect(card.journeylog).not_to eq nil
-    end
+  #   it "creates a new instance of JourneyLog" do
+  #     expect(card.journeylog).not_to eq nil
+  #   end
 
-  end
+  # end
 
 
 end

@@ -12,7 +12,7 @@ class Oystercard
   PENALTY_FARE = 6
 
 	def initialize
-    @journeylog = JourneyLog.new
+    #@journeylog = JourneyLog.new
 		@balance = 0
     @journeys = []
 	end
