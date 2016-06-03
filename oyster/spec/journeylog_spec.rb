@@ -3,7 +3,7 @@ require 'journeylog'
   describe JourneyLog do
 
     let(:journey) {double :journey}
-    let(:entry_station) {double :entry_station}
+    let(:station) {double :station}
     let(:journey_class) {double :journey_class, new: journey}
 
     subject(:journeylog) {described_class.new(journey_class)} 
@@ -12,14 +12,28 @@ require 'journeylog'
       expect(journeylog.journeys).to eq []
     end
 
+
     describe '#start' do
 
+
+
       it 'starts a new journey with the entry station provided' do
-        allow(journey).to receive(:entry_station) {entry_station} 
-        allow(entry_station).to receive(:name) {"Bank"}
-        journey1 = journeylog.start("Bank", journey)
-        name1 = journey1.entry_station.name
-        expect(name1).to eq "Bank"
+        journeylog.start("Bank")
+        allow(journey).to receive(:entry_station){station}
+        allow(station).to receive(:name){"Bank"}
+        expect(journeylog.journeys.last.entry_station.name).to eq("Bank")
+      end
+
+    end
+
+    describe '#finish' do
+
+      it 'ends a journey with the exit station provided' do
+        journeylog.start("Bank")
+        journeylog.finish("Aldgate")
+        allow(journey).to receive(:exit_station){station}
+        allow(station).to receive(:name){"Aldgate"}
+        expect(journeylog.journeys.last.exit_station.name).to eq("Aldgate")
       end
 
     end
