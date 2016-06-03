@@ -15,8 +15,6 @@ require 'journeylog'
 
     describe '#start' do
 
-
-
       it 'starts a new journey with the entry station provided' do
         journeylog.start("Bank")
         allow(journey).to receive(:entry_station){station}
@@ -30,6 +28,7 @@ require 'journeylog'
 
       it 'ends a journey with the exit station provided' do
         journeylog.start("Bank")
+        allow(journey).to receive(:set_exit)
         journeylog.finish("Aldgate")
         allow(journey).to receive(:exit_station){station}
         allow(station).to receive(:name){"Aldgate"}
@@ -38,5 +37,15 @@ require 'journeylog'
 
     end
 
+    describe '#current_journey' do
+      
+      it 'returns an incomplete journey' do
+        journeylog.start("Bank")
+        allow(journey).to receive(:entry_station){station}
+        allow(station).to receive(:name){"Bank"}
+        expect(journeylog.current_journey).to eq(journey)
+      end
+
+    end
 
   end

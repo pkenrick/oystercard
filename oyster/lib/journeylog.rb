@@ -10,16 +10,31 @@ attr_reader :journeys
   end
 
   def start(station_name)
-  	@journeys << @journey_class.new(station_name)
+    journeys << @journey_class.new(station_name)
+    current_journey
+  end
+
+  def current_journey
+    journeys.last
   end
 
   def finish(station_name)
-    @journeys.last.set_exit(station_name)
+    current_journey.set_exit(station_name)
+  end
+
+  def unfinished_journeys?
+    in_journey? ? current_journey.set_exit("no tap out") != nil : false
+  end
+
+  def unitialized_journeys?
+    !in_journey? ? start("no tap in") != nil : false
+  end
+
+  def in_journey?
+      return current_journey.entry_station != nil && current_journey.exit_station == nil if !journeys.empty?
+      false
   end
 
 end
 
 
-journeylog = JourneyLog.new
-journeylog.start("Bank")
-p journeylog.journeys.last

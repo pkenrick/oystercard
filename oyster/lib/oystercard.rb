@@ -9,10 +9,9 @@ class Oystercard
   MINIMUM_FARE = 1
   PENALTY_FARE = 6
 
-	def initialize
-    #@journeylog = JourneyLog.new
+	def initialize(journeylog_class = JourneyLog)
+    @journeylog = journeylog_class.new
 		@balance = 0
-    @journeys = []
 	end
 
 	def top_up(amount)
@@ -27,41 +26,28 @@ class Oystercard
 
   def touch_in(entry_station)
     fail 'Insufficient funds for journey' if check_funds
-    close_bad_journeys
-    @journeys << Journey.new(entry_station)
+    deduct(fare(journeylog.current_journey)) if journeylog.unfinished_journeys?
+    journeylog.start(entry_station)
   end
 
   def touch_out(exit_station)
-    close_unitialized_journeys
-    @journeys.last.set_exit(exit_station)
-    deduct(fare(@journeys.last))
-  end
-
-  def close_bad_journeys
-    if in_journey?
-      @journeys.last.set_exit("no check-in")
-      deduct(fare(@journeys.last))
-    end
-  end
-
-  def close_unitialized_journeys
-      @journeys << Journey.new("no check-in") if !in_journey?
+    journeylog.unitialized_journeys?
+    journeylog.finish(exit_station)
+    deduct(fare(journeylog.current_journey))
   end
 
   def fare(journey)
-    return PENALTY_FARE if journey.entry_station.name == "no check-in" || journey.exit_station.name == "no check-in"
-    MINIMUM_FARE
+    if journeylog.current_journey.entry_station.name == "no tap in" || 
+       journey.exit_station.name == "no tap out"
+        return PENALTY_FARE 
+    else
+      return MINIMUM_FARE
+    end
   end
 
-  def in_journey?
-     return @journeys.last.entry_station != nil && @journeys.last.exit_station == nil if @journeys != []
-      false
+  def history
+    journeylog.journeys
   end
-
-  def journeys
-    @journeys
-  end
-
 
   private
 
@@ -74,14 +60,17 @@ class Oystercard
   end
 end
 
-oyster = Oystercard.new
-oyster.top_up(10)
-oyster.touch_in("Bank")
-oyster.touch_out("Aldgate")
-p oyster.journeys
-p oyster.balance
-oyster.touch_out("Bank")
-p oyster.balance
+# oyster = Oystercard.new
+# oyster.top_up(10)
+# p "Balance is now: #{oyster.balance}"
+# oyster.touch_in("Bank")
+# oyster.touch_out("Aldgate")
+# p "Card has touched in and out correctly.  Balance is now: #{oyster.balance}"
+# oyster.touch_out("Aldgate")
+# p "Skipped the tap in, and now tapped out at Aldgate.  A penalty fare should be charged."
+# p "Card balance is now: #{oyster.balance}"
+
+
 
 
 

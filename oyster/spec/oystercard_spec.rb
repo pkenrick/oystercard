@@ -1,10 +1,12 @@
 require 'oystercard'
 
 describe Oystercard do
-  subject(:card) { described_class.new}
+  subject(:card) { described_class.new(journeylog_class)}
   let(:entry_station) { double :entry_station }
   let(:exit_station) { double :exit_station }
   let(:journey) { double :journey}
+  let(:journeylog_class) {double :journeylog_class, new: journeylog}
+  let(:journeylog) {double :journeylog}
 # In order to use public transport
 # As a customer
 # I want money on my card
@@ -122,13 +124,13 @@ describe Oystercard do
 
   end
 
-  # describe "upon initialization" do
+  describe "upon initialization" do
 
-  #   it "creates a new instance of JourneyLog" do
-  #     expect(card.journeylog).not_to eq nil
-  #   end
+    it "creates a new instance of JourneyLog" do
+      expect(card.journeylog).to eq(journeylog)
+    end
 
-  # end
+  end
 
 
 end
