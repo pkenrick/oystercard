@@ -1,13 +1,20 @@
 require 'journeylog'
 
-describe JourneyLog do
+  describe JourneyLog do
 
-subject(:journeylog) {described_class.new}
+    let(:journey) {double :journey}
+    let(:entry_station) {double :entry_station}
+    let(:journey_class) {double :journey_class, new: journey}
 
- describe "upon initialization" do
-   it "creates an empty array variable to store journeys" do
-    expect(journeylog.logbook).to eq []
-   end
-end
+    subject(:journeylog) {described_class.new(journey_class: journey_class)} 
 
-end
+    describe "#start" do
+
+      it 'starts a new journey using entry_station' do
+        # journeylog.new
+      end
+
+    end
+
+
+  end

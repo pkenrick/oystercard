@@ -1,9 +1,14 @@
 class JourneyLog
 
-attr_reader :logbook
+attr_reader :journeys
 
   def initialize
-    @logbook = []
+    @journey_class = nil
+    @journeys = []
   end
+
+  # def create_journey
+
+  # end
 
 end
